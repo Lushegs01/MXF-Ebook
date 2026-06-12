@@ -15,6 +15,7 @@ import Progress from './pages/Progress';
 import Profile from './pages/Profile';
 import WorkoutSession from './pages/WorkoutSession';
 import ExerciseDetail from './pages/ExerciseDetail';
+import NutritionDetail from './pages/NutritionDetail';
 import Premium from './pages/Premium';
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -53,6 +54,7 @@ export default function App() {
 
           <Route path="/workout/:id" element={<ProtectedRoute><WorkoutSession /></ProtectedRoute>} />
           <Route path="/exercise/:id" element={<ProtectedRoute><ExerciseDetail /></ProtectedRoute>} />
+          <Route path="/nutrition/:id" element={<ProtectedRoute><NutritionDetail /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
