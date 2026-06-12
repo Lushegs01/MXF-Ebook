@@ -30,12 +30,46 @@ service cloud.firestore {
         && (!('legs' in data) || data.legs is number);
     }
 
+    function isValidWorkoutSession(data, userId) {
+      return data.keys().hasAll(['userId', 'workoutId', 'workoutTitle', 'completedAt', 'createdAt'])
+        && data.keys().size() <= 8
+        && data.userId == userId
+        && data.workoutId is string && data.workoutId.size() <= 64
+        && data.workoutTitle is string && data.workoutTitle.size() <= 100
+        && data.completedAt is string && data.completedAt.size() <= 20
+        && data.createdAt == request.time
+        && (!('durationMin' in data) || data.durationMin is number)
+        && (!('exerciseCount' in data) || data.exerciseCount is number);
+    }
+
+    function isValidUserProfile(data) {
+      return data.keys().size() <= 5
+        && (!('isPremium' in data) || data.isPremium is bool)
+        && (!('goalWeight' in data) || data.goalWeight == null || data.goalWeight is number)
+        && (!('notificationsEnabled' in data) || data.notificationsEnabled is bool)
+        && (!('updatedAt' in data) || data.updatedAt == request.time);
+    }
+
+    match /users/{userId} {
+      allow get: if isSignedIn() && request.auth.uid == userId && isValidId(userId);
+      allow create, update: if isSignedIn() && request.auth.uid == userId && isValidId(userId)
+        && isValidUserProfile(incoming());
+    }
+
     match /users/{userId}/progressLogs/{logId} {
       allow get: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(logId);
       allow list: if isSignedIn() && request.auth.uid == userId && isValidId(userId);
       allow create: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(logId)
         && isValidProgressLog(incoming(), userId);
       allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(logId);
+    }
+
+    match /users/{userId}/workoutSessions/{sessionId} {
+      allow get: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(sessionId);
+      allow list: if isSignedIn() && request.auth.uid == userId && isValidId(userId);
+      allow create: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(sessionId)
+        && isValidWorkoutSession(incoming(), userId);
+      allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(sessionId);
     }
   }
 }

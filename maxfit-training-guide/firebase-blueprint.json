@@ -7,20 +7,53 @@
       "properties": {
         "userId": { "type": "string" },
         "weight": { "type": "number" },
-        "chest": { "type": "number" },
-        "waist": { "type": "number" },
+        "chest": { "type": "number", "description": "Optional" },
+        "waist": { "type": "number", "description": "Optional" },
         "arms": { "type": "number", "description": "Optional" },
         "legs": { "type": "number", "description": "Optional" },
         "date": { "type": "string" },
         "createdAt": { "type": "string" }
       },
       "required": ["userId", "weight", "date", "createdAt"]
+    },
+    "WorkoutSession": {
+      "title": "WorkoutSession",
+      "description": "A completed workout logged to the user's history",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "workoutId": { "type": "string" },
+        "workoutTitle": { "type": "string" },
+        "durationMin": { "type": "number", "description": "Optional" },
+        "exerciseCount": { "type": "number", "description": "Optional" },
+        "completedAt": { "type": "string", "description": "YYYY-MM-DD" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "workoutId", "workoutTitle", "completedAt", "createdAt"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Per-user settings stored on the user document",
+      "type": "object",
+      "properties": {
+        "isPremium": { "type": "boolean", "description": "Optional" },
+        "goalWeight": { "type": "number", "description": "Optional" },
+        "notificationsEnabled": { "type": "boolean", "description": "Optional" }
+      }
     }
   },
   "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User document holding profile settings (premium status, goal weight, notification preference)."
+    },
     "users/{userId}/progressLogs/{logId}": {
       "schema": { "$ref": "#/entities/ProgressLog" },
       "description": "Collection inside user doc for their progress tracking logs."
+    },
+    "users/{userId}/workoutSessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/WorkoutSession" },
+      "description": "Collection inside user doc for completed workout history."
     }
   }
 }
