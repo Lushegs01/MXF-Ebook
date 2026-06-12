@@ -1,0 +1,26 @@
+{
+  "entities": {
+    "ProgressLog": {
+      "title": "ProgressLog",
+      "description": "User progress measurements",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "weight": { "type": "number" },
+        "chest": { "type": "number" },
+        "waist": { "type": "number" },
+        "arms": { "type": "number", "description": "Optional" },
+        "legs": { "type": "number", "description": "Optional" },
+        "date": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "weight", "date", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}/progressLogs/{logId}": {
+      "schema": { "$ref": "#/entities/ProgressLog" },
+      "description": "Collection inside user doc for their progress tracking logs."
+    }
+  }
+}
