@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { ReactNode } from 'react';
 import { AuthProvider, useAuth } from './lib/AuthContext';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthScreen from './pages/AuthScreen';
@@ -16,7 +17,7 @@ import WorkoutSession from './pages/WorkoutSession';
 import ExerciseDetail from './pages/ExerciseDetail';
 import Premium from './pages/Premium';
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   
   if (loading) {
