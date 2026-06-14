@@ -59,13 +59,13 @@ export default function Profile() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-8">
       <div className="flex flex-col items-center pt-8">
-        <div className="h-28 w-28 rounded-full overflow-hidden border-4 border-[#00E676] mb-4 shadow-[0_0_20px_rgba(0,230,118,0.2)]">
+        <div className="h-28 w-28 rounded-full overflow-hidden border-4 border-[#F26F21] mb-4 shadow-[0_0_20px_rgba(242,111,33,0.2)]">
           <img src={user?.photoURL || 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix'} alt="Profile" className="w-full h-full object-cover" />
         </div>
         <h1 className="text-3xl font-extrabold text-white">{name || 'Athlete'}</h1>
         <p className="text-white/40 font-medium">{user?.email}</p>
         {profile.isPremium ? (
-          <div className="mt-6 px-4 py-1.5 bg-[#00E676]/10 border border-[#00E676]/20 text-[#00E676] rounded text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5">
+          <div className="mt-6 px-4 py-1.5 bg-[#F26F21]/10 border border-[#F26F21]/20 text-[#F26F21] rounded text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5">
             <Crown className="h-3 w-3 fill-current" /> PREMIUM MEMBER
           </div>
         ) : (
@@ -95,7 +95,7 @@ export default function Profile() {
             </div>
             <span className="font-bold text-white">Notifications</span>
           </div>
-          <span className={`text-xs font-bold uppercase tracking-wider ${profile.notificationsEnabled ? 'text-[#00E676]' : 'text-white/40'}`}>
+          <span className={`text-xs font-bold uppercase tracking-wider ${profile.notificationsEnabled ? 'text-[#F26F21]' : 'text-white/40'}`}>
             {profile.notificationsEnabled ? 'On' : 'Off'}
           </span>
         </button>
@@ -123,7 +123,7 @@ export default function Profile() {
               value={draftName}
               onChange={(e) => setDraftName(e.target.value)}
               placeholder="Your name"
-              className="w-full h-14 bg-black/50 border border-white/10 rounded-2xl px-5 text-white focus:outline-none focus:border-[#00E676] mb-5 transition-colors placeholder:text-white/20 font-bold"
+              className="w-full h-14 bg-black/50 border border-white/10 rounded-2xl px-5 text-white focus:outline-none focus:border-[#F26F21] mb-5 transition-colors placeholder:text-white/20 font-bold"
             />
             <label className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2 block">Goal Weight (lbs)</label>
             <input
@@ -131,11 +131,11 @@ export default function Profile() {
               value={draftGoal}
               onChange={(e) => setDraftGoal(e.target.value)}
               placeholder="e.g. 175"
-              className="w-full h-14 bg-black/50 border border-white/10 rounded-2xl px-5 text-white focus:outline-none focus:border-[#00E676] mb-8 transition-colors placeholder:text-white/20 font-bold"
+              className="w-full h-14 bg-black/50 border border-white/10 rounded-2xl px-5 text-white focus:outline-none focus:border-[#F26F21] mb-8 transition-colors placeholder:text-white/20 font-bold"
             />
             <div className="flex gap-4">
               <button onClick={() => setModal(null)} className="flex-1 h-14 bg-white/5 text-white rounded-2xl font-bold hover:bg-white/10 transition-colors">Cancel</button>
-              <button onClick={handleSaveProfile} disabled={saving} className="flex-1 h-14 bg-[#00E676] text-black rounded-2xl font-bold hover:bg-[#00E676]/90 transition-colors disabled:opacity-60">
+              <button onClick={handleSaveProfile} disabled={saving} className="flex-1 h-14 bg-[#F26F21] text-black rounded-2xl font-bold hover:bg-[#F26F21]/90 transition-colors disabled:opacity-60">
                 {saving ? 'Saving…' : 'Save'}
               </button>
             </div>
@@ -155,12 +155,12 @@ export default function Profile() {
               <button
                 onClick={toggleNotifications}
                 aria-label="Toggle notifications"
-                className={`relative h-7 w-12 rounded-full transition-colors ${profile.notificationsEnabled ? 'bg-[#00E676]' : 'bg-white/15'}`}
+                className={`relative h-7 w-12 rounded-full transition-colors ${profile.notificationsEnabled ? 'bg-[#F26F21]' : 'bg-white/15'}`}
               >
                 <span className={`absolute top-1 h-5 w-5 rounded-full bg-white transition-all ${profile.notificationsEnabled ? 'left-6' : 'left-1'}`} />
               </button>
             </div>
-            <button onClick={() => setModal(null)} className="w-full h-14 bg-[#00E676] text-black rounded-2xl font-bold hover:bg-[#00E676]/90 transition-colors">Done</button>
+            <button onClick={() => setModal(null)} className="w-full h-14 bg-[#F26F21] text-black rounded-2xl font-bold hover:bg-[#F26F21]/90 transition-colors">Done</button>
           </motion.div>
         </div>
       )}

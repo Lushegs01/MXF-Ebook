@@ -31,7 +31,7 @@ export default function MainLayout() {
               className={({ isActive }) =>
                 cn(
                   'flex flex-col items-center p-2 rounded-xl transition-all duration-300 relative',
-                  isActive ? 'text-mf-green' : 'text-mf-muted-foreground hover:text-mf-white'
+                  isActive ? 'text-mf-orange' : 'text-mf-muted-foreground hover:text-mf-white'
                 )
               }
             >
@@ -44,7 +44,7 @@ export default function MainLayout() {
                   {isActive && (
                     <motion.div
                       layoutId="bottom-nav-active"
-                      className="absolute inset-0 bg-mf-green/10 rounded-xl"
+                      className="absolute inset-0 bg-mf-orange/10 rounded-xl"
                       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                     />
                   )}

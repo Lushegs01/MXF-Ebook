@@ -12,7 +12,7 @@ export default function ExerciseDetail() {
     return (
       <div className="min-h-screen bg-[#0F0F0F] text-white flex flex-col items-center justify-center p-6 text-center gap-6">
         <h1 className="text-2xl font-bold">Exercise not found</h1>
-        <button onClick={() => navigate(-1)} className="px-8 py-4 bg-[#00E676] text-black rounded-2xl font-bold">
+        <button onClick={() => navigate(-1)} className="px-8 py-4 bg-[#F26F21] text-black rounded-2xl font-bold">
           Go Back
         </button>
       </div>
@@ -34,7 +34,7 @@ export default function ExerciseDetail() {
 
       <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="flex-1 p-6 space-y-8 overflow-y-auto pb-24">
          <div>
-           <div className="inline-block px-3 py-1 bg-[#00E676]/10 text-[#00E676] rounded text-[10px] font-bold tracking-widest mb-4 uppercase">{exercise.difficulty}</div>
+           <div className="inline-block px-3 py-1 bg-[#F26F21]/10 text-[#F26F21] rounded text-[10px] font-bold tracking-widest mb-4 uppercase">{exercise.difficulty}</div>
            <h1 className="text-3xl font-extrabold mb-2 leading-tight">{exercise.name}</h1>
            <p className="text-white/40 font-bold text-[10px] tracking-widest uppercase">Target: {exercise.target}</p>
          </div>
