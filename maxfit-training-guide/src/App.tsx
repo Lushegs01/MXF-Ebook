@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from './lib/AuthContext';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthScreen from './pages/AuthScreen';
 import MainLayout from './components/layout/MainLayout';
+import Logo from './components/Logo';
 import Home from './pages/Home';
 import Workouts from './pages/Workouts';
 import Nutrition from './pages/Nutrition';
@@ -23,7 +24,8 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   
   if (loading) {
     return (
-      <div className="min-h-screen bg-mf-black text-mf-white flex items-center justify-center">
+      <div className="min-h-screen bg-mf-black text-mf-white flex flex-col items-center justify-center gap-8">
+        <Logo variant="mark" className="h-20 w-20 animate-pulse" />
         <div className="w-8 h-8 border-4 border-mf-green border-t-transparent rounded-full animate-spin"></div>
       </div>
     );

@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { useAuth } from '../lib/AuthContext';
 import { Play, ChevronRight, Activity, Apple } from 'lucide-react';
+import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { fetchProgressLogs, fetchWorkoutSessions } from '../lib/db';
 import { getTodaysWorkout, getCategories, WEEKLY_WORKOUT_GOAL } from '../lib/content';
@@ -49,20 +50,28 @@ export default function Home() {
       className="p-6 space-y-8"
     >
       {/* Header */}
-      <header className="flex items-center justify-between pt-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
-            Welcome back, {user?.displayName?.split(' ')[0] || 'there'}
-          </h1>
-          <p className="text-white/40 text-[15px] font-medium">Stay consistent. Results follow.</p>
+      <header className="pt-4">
+        <div className="flex items-center gap-2 mb-6">
+          <Logo variant="mark" className="h-8 w-8" />
+          <span className="text-lg font-extrabold tracking-tight text-white">
+            MAX<span className="text-[#F26F21]">FIT</span>
+          </span>
         </div>
-        <div className="flex items-center gap-4 bg-white/5 p-1 pr-4 rounded-full border border-white/10 cursor-pointer" onClick={() => navigate('/progress')}>
-          <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-mf-green">
-            <img src={user?.photoURL || 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix'} alt="Profile" className="w-full h-full object-cover" />
-          </div>
+        <div className="flex items-center justify-between">
           <div>
-            <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest">Weight</div>
-            <div className="text-sm font-bold">{latestWeight || '--'} <span className="text-[#00E676] text-[10px] ml-1">lbs</span></div>
+            <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
+              Welcome back, {user?.displayName?.split(' ')[0] || 'there'}
+            </h1>
+            <p className="text-white/40 text-[15px] font-medium">Stay consistent. Results follow.</p>
+          </div>
+          <div className="flex items-center gap-4 bg-white/5 p-1 pr-4 rounded-full border border-white/10 cursor-pointer" onClick={() => navigate('/progress')}>
+            <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-mf-green">
+              <img src={user?.photoURL || 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix'} alt="Profile" className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest">Weight</div>
+              <div className="text-sm font-bold">{latestWeight || '--'} <span className="text-[#00E676] text-[10px] ml-1">lbs</span></div>
+            </div>
           </div>
         </div>
       </header>

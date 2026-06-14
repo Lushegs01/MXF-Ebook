@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { motion } from 'motion/react';
-import { Activity } from 'lucide-react';
+import Logo from '../components/Logo';
 
 export default function AuthScreen() {
   const [error, setError] = useState('');
@@ -32,11 +32,8 @@ export default function AuthScreen() {
         transition={{ duration: 0.6 }}
         className="flex-1 flex flex-col pt-12"
       >
-        <div className="flex items-center gap-4 mb-20">
-          <div className="h-14 w-14 rounded-2xl bg-[#00E676] flex items-center justify-center">
-            <Activity className="h-7 w-7 text-black" />
-          </div>
-          <h1 className="text-4xl font-extrabold tracking-tight">MaxFit</h1>
+        <div className="flex justify-center mb-16">
+          <Logo variant="full" className="h-52 w-auto select-none" />
         </div>
 
         <div className="space-y-4 mb-10">
