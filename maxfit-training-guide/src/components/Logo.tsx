@@ -1,7 +1,7 @@
 /**
- * MAXFIT brand logo. Renders the shared SVG assets in `public/`:
+ * MAXFIT brand logo. Renders the brand PNG assets in `public/`:
  * - `full`  → complete logo (house, figure, MAXFIT wordmark, tagline)
- * - `mark`  → icon-only mark (house + figure), ideal for small/square spots
+ * - `mark`  → icon-only emblem (house + figure), ideal for small/square spots
  */
 interface LogoProps {
   variant?: 'full' | 'mark';
@@ -9,7 +9,7 @@ interface LogoProps {
 }
 
 export default function Logo({ variant = 'full', className }: LogoProps) {
-  const src = variant === 'mark' ? '/favicon.svg' : '/logo.svg';
+  const src = variant === 'mark' ? '/logo-mark.png' : '/logo.png';
   return (
     <img
       src={src}
