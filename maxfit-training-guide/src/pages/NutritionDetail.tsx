@@ -12,7 +12,7 @@ export default function NutritionDetail() {
     return (
       <div className="min-h-screen bg-[#0F0F0F] text-white flex flex-col items-center justify-center p-6 text-center gap-6">
         <h1 className="text-2xl font-bold">Plan not found</h1>
-        <button onClick={() => navigate('/nutrition')} className="px-8 py-4 bg-[#00E676] text-black rounded-2xl font-bold">
+        <button onClick={() => navigate('/nutrition')} className="px-8 py-4 bg-[#138086] text-black rounded-2xl font-bold">
           Back to Nutrition
         </button>
       </div>
@@ -37,7 +37,7 @@ export default function NutritionDetail() {
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${plan.image}')` }} />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0F] via-[#0F0F0F]/30 to-transparent" />
         <div className="absolute bottom-0 left-0 p-6">
-          <div className="text-[10px] uppercase font-bold tracking-widest text-[#00E676] mb-1 flex items-center gap-1.5"><Apple className="h-3 w-3" /> {plan.calories} KCAL / DAY</div>
+          <div className="text-[10px] uppercase font-bold tracking-widest text-[#138086] mb-1 flex items-center gap-1.5"><Apple className="h-3 w-3" /> {plan.calories} KCAL / DAY</div>
           <h1 className="text-3xl font-extrabold leading-tight">{plan.title}</h1>
         </div>
       </div>
@@ -60,12 +60,12 @@ export default function NutritionDetail() {
             <div key={i} className="bg-white/5 border border-white/10 rounded-[24px] p-5">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="font-bold text-white">{meal.name}</h3>
-                <span className="text-[#00E676] text-xs font-bold">{meal.calories} kcal</span>
+                <span className="text-[#138086] text-xs font-bold">{meal.calories} kcal</span>
               </div>
               <ul className="space-y-2">
                 {meal.items.map((item, j) => (
                   <li key={j} className="flex items-center gap-3 text-white/60 text-[15px] font-medium">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#00E676]/60 flex-shrink-0" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#138086]/60 flex-shrink-0" />
                     {item}
                   </li>
                 ))}

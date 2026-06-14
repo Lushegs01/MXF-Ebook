@@ -37,7 +37,7 @@ export default function AuthScreen() {
         </div>
 
         <div className="space-y-4 mb-10">
-          <h2 className="text-5xl font-extrabold tracking-tight leading-[1.1]">Train <br/><span className="text-[#00E676]">Like a Pro.</span></h2>
+          <h2 className="text-5xl font-extrabold tracking-tight leading-[1.1]">Train <br/><span className="text-[#F26F21]">Like a Pro.</span></h2>
           <p className="text-white/40 text-[17px] font-medium max-w-sm mt-4">
             Your premium interactive workout handbook and training guide.
           </p>
@@ -54,7 +54,7 @@ export default function AuthScreen() {
           <button 
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="w-full h-16 bg-white text-black rounded-2xl font-bold text-lg hover:bg-[#00E676] transition-colors flex items-center justify-center disabled:opacity-50"
+            className="w-full h-16 bg-white text-black rounded-2xl font-bold text-lg hover:bg-[#F26F21] transition-colors flex items-center justify-center disabled:opacity-50"
           >
             {loading ? "Authenticating..." : "Continue with Google"}
           </button>

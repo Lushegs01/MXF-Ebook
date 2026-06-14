@@ -26,7 +26,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
     return (
       <div className="min-h-screen bg-mf-black text-mf-white flex flex-col items-center justify-center gap-8">
         <Logo variant="mark" className="h-20 w-20 animate-pulse" />
-        <div className="w-8 h-8 border-4 border-mf-green border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-4 border-mf-orange border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }

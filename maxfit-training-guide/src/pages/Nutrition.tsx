@@ -25,12 +25,12 @@ export default function Nutrition() {
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
             <div className="absolute bottom-0 left-0 p-6 w-full flex justify-between items-end">
               <div>
-                <div className="text-[10px] uppercase font-bold tracking-widest text-[#00E676] mb-1 flex items-center gap-1.5"><Apple className="h-3 w-3" /> {plan.calories} KCAL / DAY</div>
+                <div className="text-[10px] uppercase font-bold tracking-widest text-[#138086] mb-1 flex items-center gap-1.5"><Apple className="h-3 w-3" /> {plan.calories} KCAL / DAY</div>
                 <h3 className="text-2xl font-bold text-white mb-1 leading-tight">{plan.title}</h3>
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); navigate(`/nutrition/${plan.id}`); }}
-                className="px-5 py-2.5 bg-white text-black font-bold text-sm rounded-xl hover:bg-[#00E676] transition-colors"
+                className="px-5 py-2.5 bg-white text-black font-bold text-sm rounded-xl hover:bg-[#138086] transition-colors"
               >
                 VIEW
               </button>

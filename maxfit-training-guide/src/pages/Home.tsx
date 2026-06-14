@@ -65,12 +65,12 @@ export default function Home() {
             <p className="text-white/40 text-[15px] font-medium">Stay consistent. Results follow.</p>
           </div>
           <div className="flex items-center gap-4 bg-white/5 p-1 pr-4 rounded-full border border-white/10 cursor-pointer" onClick={() => navigate('/progress')}>
-            <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-mf-green">
+            <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-mf-orange">
               <img src={user?.photoURL || 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix'} alt="Profile" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest">Weight</div>
-              <div className="text-sm font-bold">{latestWeight || '--'} <span className="text-[#00E676] text-[10px] ml-1">lbs</span></div>
+              <div className="text-sm font-bold">{latestWeight || '--'} <span className="text-[#F26F21] text-[10px] ml-1">lbs</span></div>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function Home() {
           </div>
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div>
-              <div className="inline-block px-3 py-1 bg-black text-[#00E676] text-[10px] font-bold tracking-widest uppercase rounded mb-4">Today's Session</div>
+              <div className="inline-block px-3 py-1 bg-black text-[#F26F21] text-[10px] font-bold tracking-widest uppercase rounded mb-4">Today's Session</div>
               <h2 className="text-4xl font-extrabold mb-4 leading-[1.1]">{todaysWorkout.title}</h2>
               <div className="flex gap-6 mt-6">
                 <div className="flex flex-col">
@@ -102,7 +102,7 @@ export default function Home() {
             </div>
 
             <button
-              className="w-fit px-8 py-4 bg-black text-white font-bold rounded-2xl flex items-center gap-3 hover:bg-[#00E676] hover:text-black transition-all"
+              className="w-fit px-8 py-4 bg-black text-white font-bold rounded-2xl flex items-center gap-3 hover:bg-[#F26F21] hover:text-black transition-all"
               onClick={(e) => { e.stopPropagation(); navigate(`/workout/${todaysWorkout.id}`); }}
             >
               START WORKOUT <Play className="h-5 w-5 fill-current" />
@@ -115,14 +115,14 @@ export default function Home() {
       <section className="bg-white/5 border border-white/10 rounded-[32px] p-6 flex flex-col">
         <div className="flex justify-between items-center mb-6">
           <span className="text-lg font-bold">Weekly Progress</span>
-          <span className="text-[#00E676] text-sm font-bold">{goalPct}% Goal</span>
+          <span className="text-[#F26F21] text-sm font-bold">{goalPct}% Goal</span>
         </div>
 
         <div className="flex-1 flex items-end gap-2 h-24">
           {week.map((d, i) => (
             <div
               key={i}
-              className={`flex-1 rounded-t-lg transition-all ${d.done ? 'bg-[#00E676]' : 'bg-white/10'}`}
+              className={`flex-1 rounded-t-lg transition-all ${d.done ? 'bg-[#F26F21]' : 'bg-white/10'}`}
               style={{ height: d.done ? '90%' : '12%' }}
             />
           ))}
@@ -139,7 +139,7 @@ export default function Home() {
             <span className="font-bold text-sm">{completed} / {WEEKLY_WORKOUT_GOAL}</span>
           </div>
           <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-[#00E676] transition-all" style={{ width: `${goalPct}%` }} />
+            <div className="h-full bg-[#F26F21] transition-all" style={{ width: `${goalPct}%` }} />
           </div>
         </div>
       </section>
@@ -155,7 +155,7 @@ export default function Home() {
             onClick={() => navigate(item.path)}
             className="w-full bg-white/5 hover:bg-white/10 transition-colors border border-white/10 rounded-[24px] p-5 flex flex-col items-start gap-4"
           >
-            <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#00E676]">
+            <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-[#F26F21]">
               <item.icon className="h-6 w-6" />
             </div>
             <div className="text-left mt-2">
@@ -167,13 +167,13 @@ export default function Home() {
 
         <button
           onClick={() => navigate('/premium')}
-          className="col-span-2 w-full mt-2 p-5 bg-gradient-to-br from-[#00E676]/20 to-transparent border border-[#00E676]/30 rounded-[24px] flex justify-between items-center"
+          className="col-span-2 w-full mt-2 p-5 bg-gradient-to-br from-[#F26F21]/20 to-transparent border border-[#F26F21]/30 rounded-[24px] flex justify-between items-center"
         >
           <div className="text-left">
-             <div className="text-[10px] font-bold text-[#00E676] mb-1 uppercase tracking-widest">Premium Member</div>
+             <div className="text-[10px] font-bold text-[#F26F21] mb-1 uppercase tracking-widest">Premium Member</div>
              <div className="text-lg font-bold text-white leading-snug">Unlock all Pro programs</div>
           </div>
-          <ChevronRight className="h-6 w-6 text-[#00E676]" />
+          <ChevronRight className="h-6 w-6 text-[#F26F21]" />
         </button>
       </section>
 

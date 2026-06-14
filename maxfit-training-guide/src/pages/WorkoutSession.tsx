@@ -72,7 +72,7 @@ export default function WorkoutSession() {
         <p className="text-white/40">This session isn’t available.</p>
         <button
           onClick={() => navigate('/workouts')}
-          className="px-8 py-4 bg-[#00E676] text-black rounded-2xl font-bold"
+          className="px-8 py-4 bg-[#F26F21] text-black rounded-2xl font-bold"
         >
           Browse Workouts
         </button>
@@ -84,14 +84,14 @@ export default function WorkoutSession() {
     return (
       <div className="min-h-screen bg-[#0F0F0F] text-white flex flex-col items-center justify-center p-6 text-center">
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="space-y-6">
-          <div className="h-24 w-24 bg-[#00E676]/20 text-[#00E676] rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="h-24 w-24 bg-[#F26F21]/20 text-[#F26F21] rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="h-12 w-12" />
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight">Workout Complete</h1>
           <p className="text-white/40 text-lg">{workout.title} · {exercises.length} exercises · {workout.duration} min</p>
           <button
             onClick={() => navigate('/')}
-            className="w-full h-14 mt-8 bg-[#00E676] text-black rounded-2xl font-bold text-lg hover:bg-[#00E676]/90 transition-colors shadow-[0_0_20px_rgba(0,230,118,0.2)]"
+            className="w-full h-14 mt-8 bg-[#F26F21] text-black rounded-2xl font-bold text-lg hover:bg-[#F26F21]/90 transition-colors shadow-[0_0_20px_rgba(242,111,33,0.2)]"
           >
             Finish
           </button>
@@ -107,7 +107,7 @@ export default function WorkoutSession() {
         <button onClick={() => navigate(-1)} className="h-12 w-12 rounded-full bg-black/40 backdrop-blur border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
           <X className="h-6 w-6" />
         </button>
-        <div className="font-sans text-sm tracking-widest font-bold text-[#00E676] uppercase">
+        <div className="font-sans text-sm tracking-widest font-bold text-[#F26F21] uppercase">
           {currentIdx + 1} / {exercises.length}
         </div>
       </header>
@@ -122,12 +122,12 @@ export default function WorkoutSession() {
         {isResting ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
             <h2 className="text-2xl font-bold mb-4 text-white/40 tracking-wide uppercase">Rest</h2>
-            <div className="text-[80px] leading-none font-bold text-[#00E676] mb-8 tracking-tighter">
+            <div className="text-[80px] leading-none font-bold text-[#F26F21] mb-8 tracking-tighter">
               {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
             </div>
             <button
               onClick={() => setIsResting(false)}
-              className="px-8 py-4 rounded-2xl bg-white text-black font-bold uppercase tracking-wider text-sm hover:bg-[#00E676] transition-colors"
+              className="px-8 py-4 rounded-2xl bg-white text-black font-bold uppercase tracking-wider text-sm hover:bg-[#F26F21] transition-colors"
             >
               Skip Rest
             </button>
@@ -137,7 +137,7 @@ export default function WorkoutSession() {
              <button
                onClick={() => navigate(`/exercise/${exercise.id}`)}
                aria-label="View exercise instructions"
-               className="h-24 w-24 rounded-full bg-[#00E676]/90 text-black flex items-center justify-center backdrop-blur-sm shadow-[0_0_30px_rgba(0,230,118,0.3)] hover:scale-105 transition-transform"
+               className="h-24 w-24 rounded-full bg-[#F26F21]/90 text-black flex items-center justify-center backdrop-blur-sm shadow-[0_0_30px_rgba(242,111,33,0.3)] hover:scale-105 transition-transform"
              >
                <Play className="h-10 w-10 ml-2" />
              </button>
@@ -148,10 +148,10 @@ export default function WorkoutSession() {
       {/* Control Panel */}
       <div className="bg-[#0F0F0F] rounded-t-[32px] border-t border-white/10 p-8 z-30 pb-12 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
         <div className="mb-8 text-center space-y-2">
-          <p className="text-[#00E676] font-bold text-[10px] tracking-widest uppercase mb-2">{exercise.target}</p>
+          <p className="text-[#F26F21] font-bold text-[10px] tracking-widest uppercase mb-2">{exercise.target}</p>
           <button
             onClick={() => navigate(`/exercise/${exercise.id}`)}
-            className="inline-flex items-center gap-2 text-3xl font-bold leading-tight hover:text-[#00E676] transition-colors"
+            className="inline-flex items-center gap-2 text-3xl font-bold leading-tight hover:text-[#F26F21] transition-colors"
           >
             {exercise.name}
             <Info className="h-5 w-5 text-white/30" />
@@ -180,7 +180,7 @@ export default function WorkoutSession() {
 
           <button
             onClick={handleNext}
-            className="flex-1 h-[60px] bg-white text-black rounded-2xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-[#00E676] transition-colors"
+            className="flex-1 h-[60px] bg-white text-black rounded-2xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-[#F26F21] transition-colors"
           >
             {currentIdx === exercises.length - 1 ? 'Complete' : 'Next Exercise'}
             <ChevronRight className="h-6 w-6" />

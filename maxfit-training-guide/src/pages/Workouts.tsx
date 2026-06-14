@@ -42,14 +42,14 @@ export default function Workouts() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search workouts..."
-            className="w-full h-12 bg-white/5 rounded-full pl-12 pr-4 text-sm font-medium border border-white/10 focus:outline-none focus:border-[#00E676] transition-colors text-white placeholder:text-white/40"
+            className="w-full h-12 bg-white/5 rounded-full pl-12 pr-4 text-sm font-medium border border-white/10 focus:outline-none focus:border-[#F26F21] transition-colors text-white placeholder:text-white/40"
           />
         </div>
         <button
           onClick={() => setShowFilters((v) => !v)}
           aria-label="Toggle filters"
           className={`h-12 w-12 rounded-full border flex items-center justify-center transition-colors ${
-            showFilters || difficulty ? 'bg-[#00E676] text-black border-[#00E676]' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+            showFilters || difficulty ? 'bg-[#F26F21] text-black border-[#F26F21]' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
           }`}
         >
           <SlidersHorizontal className="h-5 w-5" />
@@ -63,7 +63,7 @@ export default function Workouts() {
               key={d}
               onClick={() => setDifficulty((cur) => (cur === d ? null : d))}
               className={`px-4 py-2 rounded-full text-xs font-bold border transition-colors ${
-                difficulty === d ? 'bg-[#00E676] text-black border-[#00E676]' : 'bg-white/5 border-white/10 text-white/60 hover:text-white'
+                difficulty === d ? 'bg-[#F26F21] text-black border-[#F26F21]' : 'bg-white/5 border-white/10 text-white/60 hover:text-white'
               }`}
             >
               {d}
@@ -88,7 +88,7 @@ export default function Workouts() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-5">
-                  <div className="text-[10px] uppercase tracking-widest text-[#00E676] font-bold mb-1">{cat.count} Workouts</div>
+                  <div className="text-[10px] uppercase tracking-widest text-[#F26F21] font-bold mb-1">{cat.count} Workouts</div>
                   <h3 className="font-bold text-white text-lg leading-tight">{cat.title}</h3>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export default function Workouts() {
           {(categoryId || difficulty || search) && (
             <button
               onClick={() => { setCategoryId(null); setDifficulty(null); setSearch(''); }}
-              className="text-xs font-bold text-[#00E676]"
+              className="text-xs font-bold text-[#F26F21]"
             >
               Clear
             </button>
