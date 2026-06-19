@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { collection, query, orderBy, getDocs, addDoc, serverTimestamp, deleteDoc, doc, limit, where, setDoc } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, getDoc, addDoc, serverTimestamp, doc, limit, where, setDoc } from 'firebase/firestore';
 
 export interface ProgressLog {
   id?: string;
@@ -119,7 +119,6 @@ export async function fetchExercises(categoryId: string): Promise<Exercise[]> {
 }
 
 export async function fetchExerciseById(id: string): Promise<Exercise | null> {
-  const { getDoc } = await import('firebase/firestore');
   try {
     const docRef = doc(db, 'exercises', id);
     const snapshot = await getDoc(docRef);
@@ -145,7 +144,6 @@ export async function fetchNutritionPlans(): Promise<NutritionPlan[]> {
 }
 
 export async function fetchNutritionPlanById(id: string): Promise<NutritionPlan | null> {
-  const { getDoc } = await import('firebase/firestore');
   try {
     const docRef = doc(db, 'nutritionPlans', id);
     const snapshot = await getDoc(docRef);
