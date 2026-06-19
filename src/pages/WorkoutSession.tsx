@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { X, Pause, Play, ChevronRight, ChevronLeft, CheckCircle2, Activity } from 'lucide-react';
+import { X, Play, ChevronRight, ChevronLeft, CheckCircle2, Activity } from 'lucide-react';
 import { fetchExercises, Exercise, addWorkoutLog } from '../lib/db';
 import { useAuth } from '../lib/AuthContext';
 

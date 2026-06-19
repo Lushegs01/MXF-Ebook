@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useAuth } from '../lib/AuthContext';
-import { Play, TrendingUp, ChevronRight, Activity } from 'lucide-react';
+import { Play, ChevronRight, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { fetchProgressLogs, fetchWorkoutLogs } from '../lib/db';
 
@@ -109,7 +109,7 @@ export default function Home() {
             <span className="font-bold text-sm">{logsCount} / {targetWorkouts}</span>
           </div>
           <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-            <div className={`w-[${progressPercent}%] h-full bg-[#00E676]`} style={{ width: `${progressPercent}%` }}></div>
+            <div className="h-full bg-[#00E676]" style={{ width: `${progressPercent}%` }}></div>
           </div>
         </div>
       </section>
