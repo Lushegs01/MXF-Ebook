@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { X, Play, ChevronRight, ChevronLeft, CheckCircle2, Activity } from 'lucide-react';
+import { X, Pause, Play, ChevronRight, ChevronLeft, CheckCircle2, Activity } from 'lucide-react';
 import { fetchExercises, Exercise, addWorkoutLog } from '../lib/db';
 import { useAuth } from '../lib/AuthContext';
 
@@ -15,6 +15,7 @@ export default function WorkoutSession() {
   
   const [currentIdx, setCurrentIdx] = useState(0);
   const [isResting, setIsResting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [startTime] = useState(Date.now());
@@ -34,22 +35,36 @@ export default function WorkoutSession() {
 
   useEffect(() => {
     let interval: any;
-    if (isResting && timeLeft > 0) {
+    if (isResting && !isPaused && timeLeft > 0) {
       interval = setInterval(() => setTimeLeft((t) => t - 1), 1000);
     } else if (timeLeft === 0 && isResting) {
       setIsResting(false);
+      setIsPaused(false);
     }
     return () => clearInterval(interval);
-  }, [isResting, timeLeft]);
+  }, [isResting, isPaused, timeLeft]);
 
   const handleNext = () => {
     if (currentIdx < exercises.length - 1) {
       setIsResting(true);
+      setIsPaused(false);
       setTimeLeft(exercise.rest);
       setCurrentIdx((prev) => prev + 1);
     } else {
       setIsFinished(true);
     }
+  };
+
+  const handleStartRest = () => {
+    if (!isResting && exercise) {
+      setIsResting(true);
+      setIsPaused(false);
+      setTimeLeft(exercise.rest);
+    }
+  };
+
+  const togglePause = () => {
+    setIsPaused((prev) => !prev);
   };
 
   const handlePrev = () => {
@@ -129,20 +144,33 @@ export default function WorkoutSession() {
         
         {isResting ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-            <h2 className="text-2xl font-bold mb-4 text-white/40 tracking-wide uppercase">Rest</h2>
-            <div className="text-[80px] leading-none font-bold text-[#00E676] mb-8 tracking-tighter">
+            <h2 className="text-2xl font-bold mb-4 text-white/40 tracking-wide uppercase">
+              {isPaused ? 'Paused' : 'Rest'}
+            </h2>
+            <div className={`text-[80px] leading-none font-bold mb-8 tracking-tighter ${isPaused ? 'text-white/40' : 'text-[#00E676]'}`}>
               {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
             </div>
-            <button 
-              onClick={() => setIsResting(false)}
-              className="px-8 py-4 rounded-2xl bg-white text-black font-bold uppercase tracking-wider text-sm hover:bg-[#00E676] transition-colors"
-            >
-              Skip Rest
-            </button>
+            <div className="flex gap-4">
+              <button 
+                onClick={togglePause}
+                className="h-16 w-16 rounded-full bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+              >
+                {isPaused ? <Play className="h-7 w-7 ml-1" /> : <Pause className="h-7 w-7" />}
+              </button>
+              <button 
+                onClick={() => { setIsResting(false); setIsPaused(false); }}
+                className="px-8 py-4 rounded-2xl bg-white text-black font-bold uppercase tracking-wider text-sm hover:bg-[#00E676] transition-colors"
+              >
+                Skip Rest
+              </button>
+            </div>
           </div>
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-             <button className="h-24 w-24 rounded-full bg-[#00E676]/90 text-black flex items-center justify-center backdrop-blur-sm animate-pulse shadow-[0_0_30px_rgba(0,230,118,0.3)]">
+             <button 
+               onClick={handleStartRest}
+               className="h-24 w-24 rounded-full bg-[#00E676]/90 text-black flex items-center justify-center backdrop-blur-sm animate-pulse shadow-[0_0_30px_rgba(0,230,118,0.3)] hover:bg-[#00E676] transition-colors cursor-pointer"
+             >
                <Play className="h-10 w-10 ml-2" />
              </button>
           </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useAuth } from '../lib/AuthContext';
-import { Play, ChevronRight, Activity } from 'lucide-react';
+import { Play, TrendingUp, ChevronRight, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { fetchProgressLogs, fetchWorkoutLogs } from '../lib/db';
 
@@ -9,12 +9,19 @@ export default function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [latestWeight, setLatestWeight] = useState<number | null>(null);
+  const [weightTrend, setWeightTrend] = useState<'up' | 'down' | 'same' | null>(null);
   const [logsCount, setLogsCount] = useState(0);
 
   useEffect(() => {
     if (user) {
       fetchProgressLogs(user.uid).then(logs => {
-        if (logs.length > 0) setLatestWeight(logs[0].weight);
+        if (logs.length > 0) {
+          setLatestWeight(logs[0].weight);
+          if (logs.length > 1) {
+            const diff = logs[0].weight - logs[1].weight;
+            setWeightTrend(diff > 0 ? 'up' : diff < 0 ? 'down' : 'same');
+          }
+        }
       });
       fetchWorkoutLogs(user.uid).then(logs => {
         setLogsCount(logs.length);
@@ -46,7 +53,12 @@ export default function Home() {
           </div>
           <div>
             <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest">Weight</div>
-            <div className="text-sm font-bold">{latestWeight || '--'} <span className="text-[#00E676] text-[10px] ml-1">lbs</span></div>
+            <div className="text-sm font-bold flex items-center gap-1">
+              {latestWeight || '--'} <span className="text-[#00E676] text-[10px]">lbs</span>
+              {weightTrend && weightTrend !== 'same' && (
+                <TrendingUp className={`h-3.5 w-3.5 ${weightTrend === 'down' ? 'text-[#00E676] rotate-180' : 'text-[#FF9800]'}`} />
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -118,7 +130,7 @@ export default function Home() {
       <section className="grid grid-cols-2 gap-4 pb-8">
         {[
           { label: 'Workout Library', desc: '24 Categories', path: '/workouts', icon: Activity },
-          { label: 'Nutrition Hub', desc: 'Custom Plans', path: '/nutrition', icon: Activity },
+          { label: 'Track Progress', desc: 'Weight & Stats', path: '/progress', icon: TrendingUp },
         ].map((item, i) => (
           <button 
             key={i}
