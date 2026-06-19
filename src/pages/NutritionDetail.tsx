@@ -1,8 +1,68 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { X, Activity, Apple } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { fetchNutritionPlans, NutritionPlan } from '../lib/db';
+import { useEffect, useState, useMemo } from 'react';
+import { fetchNutritionPlanById, NutritionPlan } from '../lib/db';
+
+interface PlanContent {
+  target: string;
+  guidelines: string[];
+  meals: { label: string; description: string; kcal: string }[];
+}
+
+function getPlanContent(plan: NutritionPlan): PlanContent {
+  const title = plan.title.toLowerCase();
+
+  if (title.includes('protein')) {
+    return {
+      target: 'Muscle Growth & Recovery',
+      guidelines: [
+        'Aim for 1g of protein per pound of bodyweight daily.',
+        'Spread protein intake across 4-5 meals for optimal absorption.',
+        'Hydrate with at least 3 liters of water daily.',
+        'Include a protein source within 30 minutes post-workout.',
+      ],
+      meals: [
+        { label: 'Breakfast', description: 'Egg Whites & Turkey Sausage', kcal: '500' },
+        { label: 'Lunch', description: 'Grilled Chicken Breast & Quinoa', kcal: '700' },
+        { label: 'Dinner', description: 'Lean Steak & Sweet Potato', kcal: '650' },
+      ],
+    };
+  }
+
+  if (title.includes('fat loss')) {
+    return {
+      target: 'Fat Loss & Lean Physique',
+      guidelines: [
+        'Maintain a moderate calorie deficit of 300-500 kcal.',
+        'Prioritize whole foods and avoid processed sugars.',
+        'Eat high-fiber vegetables with every meal to stay full.',
+        'Schedule your largest meal after your workout.',
+      ],
+      meals: [
+        { label: 'Breakfast', description: 'Greek Yogurt & Berries', kcal: '300' },
+        { label: 'Lunch', description: 'Turkey Lettuce Wraps & Veggies', kcal: '450' },
+        { label: 'Dinner', description: 'Baked Cod & Steamed Broccoli', kcal: '400' },
+      ],
+    };
+  }
+
+  // Default balanced content
+  return {
+    target: 'Balanced Nutrition & Wellness',
+    guidelines: [
+      'Drink at least 3 liters of water daily.',
+      'Prioritize protein in every meal to support recovery.',
+      'Avoid processed sugars and empty calories.',
+      'Eat your largest meal after your workout.',
+    ],
+    meals: [
+      { label: 'Breakfast', description: 'Oats & Protein Shake', kcal: '400' },
+      { label: 'Lunch', description: 'Grilled Chicken & Rice', kcal: '650' },
+      { label: 'Dinner', description: 'Salmon & Veggies', kcal: '500' },
+    ],
+  };
+}
 
 export default function NutritionDetail() {
   const { id } = useParams();
@@ -12,13 +72,18 @@ export default function NutritionDetail() {
 
   useEffect(() => {
     async function loadData() {
-      const plans = await fetchNutritionPlans();
-      const match = plans.find(p => p.id === id);
-      setPlan(match || null);
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+      const result = await fetchNutritionPlanById(id);
+      setPlan(result);
       setLoading(false);
     }
     loadData();
   }, [id]);
+
+  const content = useMemo(() => (plan ? getPlanContent(plan) : null), [plan]);
 
   if (loading) {
     return (
@@ -28,7 +93,7 @@ export default function NutritionDetail() {
     );
   }
 
-  if (!plan) {
+  if (!plan || !content) {
     return (
       <div className="h-screen flex flex-col bg-[#0F0F0F] text-white overflow-hidden max-w-md mx-auto items-center justify-center">
         <p className="text-white/60 mb-6 font-medium">Plan not found.</p>
@@ -57,43 +122,30 @@ export default function NutritionDetail() {
              {plan.cals} KCAL / DAY
            </div>
            <h1 className="text-3xl font-extrabold mb-2 leading-tight">{plan.title}</h1>
-           <p className="text-white/40 font-bold text-[10px] tracking-widest uppercase">Target: Fat Loss & Muscle Gain</p>
+           <p className="text-white/40 font-bold text-[10px] tracking-widest uppercase">Target: {content.target}</p>
          </div>
 
          <div className="bg-white/5 border border-white/10 rounded-[32px] p-6 space-y-4">
            <h2 className="text-lg font-bold">Guidelines</h2>
            <ul className="space-y-3 text-white/60 text-[15px] font-medium leading-relaxed list-disc list-inside">
-             <li>Drink at least 3 liters of water daily.</li>
-             <li>Prioritize protein in every meal to support recovery.</li>
-             <li>Avoid processed sugars and empty calories.</li>
-             <li>Eat your largest meal after your workout.</li>
+             {content.guidelines.map((g, i) => (
+               <li key={i}>{g}</li>
+             ))}
            </ul>
          </div>
 
          <div className="bg-white/5 border border-white/10 rounded-[32px] p-6 space-y-4">
            <h2 className="text-lg font-bold">Sample Meals</h2>
            <div className="space-y-4">
-             <div className="flex justify-between items-center bg-black/30 p-4 rounded-2xl">
-               <div>
-                 <p className="font-bold text-sm">Breakfast</p>
-                 <p className="text-white/40 text-xs">Oats & Protein Shake</p>
+             {content.meals.map((meal, i) => (
+               <div key={i} className="flex justify-between items-center bg-black/30 p-4 rounded-2xl">
+                 <div>
+                   <p className="font-bold text-sm">{meal.label}</p>
+                   <p className="text-white/40 text-xs">{meal.description}</p>
+                 </div>
+                 <span className="text-[#00E676] text-xs font-bold">{meal.kcal} Kcal</span>
                </div>
-               <span className="text-[#00E676] text-xs font-bold">400 Kcal</span>
-             </div>
-             <div className="flex justify-between items-center bg-black/30 p-4 rounded-2xl">
-               <div>
-                 <p className="font-bold text-sm">Lunch</p>
-                 <p className="text-white/40 text-xs">Grilled Chicken & Rice</p>
-               </div>
-               <span className="text-[#00E676] text-xs font-bold">650 Kcal</span>
-             </div>
-             <div className="flex justify-between items-center bg-black/30 p-4 rounded-2xl">
-               <div>
-                 <p className="font-bold text-sm">Dinner</p>
-                 <p className="text-white/40 text-xs">Salmon & Veggies</p>
-               </div>
-               <span className="text-[#00E676] text-xs font-bold">500 Kcal</span>
-             </div>
+             ))}
            </div>
          </div>
       </motion.div>

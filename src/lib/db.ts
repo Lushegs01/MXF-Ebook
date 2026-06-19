@@ -144,6 +144,21 @@ export async function fetchNutritionPlans(): Promise<NutritionPlan[]> {
   }
 }
 
+export async function fetchNutritionPlanById(id: string): Promise<NutritionPlan | null> {
+  const { getDoc } = await import('firebase/firestore');
+  try {
+    const docRef = doc(db, 'nutritionPlans', id);
+    const snapshot = await getDoc(docRef);
+    if (snapshot.exists()) {
+      return { id: snapshot.id, ...snapshot.data() } as NutritionPlan;
+    }
+    return null;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.LIST, `nutritionPlans/${id}`);
+    return null;
+  }
+}
+
 export async function fetchWorkoutLogs(userId: string): Promise<WorkoutLog[]> {
   const path = `users/${userId}/workoutLogs`;
   try {
@@ -191,9 +206,22 @@ export async function seedDatabaseIfEmpty() {
       }
 
       const MOCK_EXERCISES = [
+        // Muscle Gain
         { id: 'bench-press', categoryId: 'muscle-gain', name: 'Barbell Bench Press', sets: 4, reps: '8-10', rest: 60, target: 'Chest, Triceps', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop' },
         { id: 'incline-press', categoryId: 'muscle-gain', name: 'Incline Dumbbell Press', sets: 3, reps: '10-12', rest: 60, target: 'Upper Chest', image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=800&auto=format&fit=crop' },
-        { id: 'squat', categoryId: 'muscle-gain', name: 'Barbell Squat', sets: 4, reps: '8-10', rest: 90, target: 'Quads, Glutes', image: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=800&auto=format&fit=crop' }
+        { id: 'squat', categoryId: 'muscle-gain', name: 'Barbell Squat', sets: 4, reps: '8-10', rest: 90, target: 'Quads, Glutes', image: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=800&auto=format&fit=crop' },
+        // Fat Loss
+        { id: 'burpees', categoryId: 'fat-loss', name: 'Burpees', sets: 4, reps: '12-15', rest: 45, target: 'Full Body', image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=801&auto=format&fit=crop' },
+        { id: 'mountain-climbers', categoryId: 'fat-loss', name: 'Mountain Climbers', sets: 3, reps: '20-25', rest: 30, target: 'Core, Cardio', image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=802&auto=format&fit=crop' },
+        { id: 'jump-squats', categoryId: 'fat-loss', name: 'Jump Squats', sets: 4, reps: '15-20', rest: 45, target: 'Legs, Glutes', image: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=801&auto=format&fit=crop' },
+        // Strength
+        { id: 'deadlift', categoryId: 'strength', name: 'Deadlift', sets: 5, reps: '5', rest: 120, target: 'Back, Hamstrings', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=801&auto=format&fit=crop' },
+        { id: 'overhead-press', categoryId: 'strength', name: 'Overhead Press', sets: 4, reps: '6-8', rest: 90, target: 'Shoulders, Triceps', image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=801&auto=format&fit=crop' },
+        { id: 'pull-ups', categoryId: 'strength', name: 'Pull-ups', sets: 4, reps: '6-10', rest: 90, target: 'Back, Biceps', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=802&auto=format&fit=crop' },
+        // Cardio
+        { id: 'jumping-jacks', categoryId: 'cardio', name: 'Jumping Jacks', sets: 3, reps: '30', rest: 20, target: 'Full Body', image: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?q=80&w=801&auto=format&fit=crop' },
+        { id: 'high-knees', categoryId: 'cardio', name: 'High Knees', sets: 3, reps: '30', rest: 20, target: 'Legs, Cardio', image: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?q=80&w=802&auto=format&fit=crop' },
+        { id: 'box-jumps', categoryId: 'cardio', name: 'Box Jumps', sets: 4, reps: '12-15', rest: 45, target: 'Legs, Explosiveness', image: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?q=80&w=803&auto=format&fit=crop' },
       ];
       for (const ex of MOCK_EXERCISES) {
         await setDoc(doc(db, 'exercises', ex.id), {

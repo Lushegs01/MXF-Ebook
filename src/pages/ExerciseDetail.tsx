@@ -50,7 +50,7 @@ export default function ExerciseDetail() {
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${exercise.image}')` }} />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0F] via-transparent to-transparent" />
         <div className="absolute inset-0 flex items-center justify-center">
-           <button className="h-16 w-16 rounded-full bg-white/20 backdrop-blur border border-white/40 flex items-center justify-center hover:bg-white/30 transition-colors">
+           <button onClick={() => navigate(`/workout/${exercise.categoryId}`)} className="h-16 w-16 rounded-full bg-white/20 backdrop-blur border border-white/40 flex items-center justify-center hover:bg-white/30 transition-colors cursor-pointer">
              <Play className="h-8 w-8 ml-1 fill-white" />
            </button>
         </div>

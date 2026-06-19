@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { useAuth } from '../lib/AuthContext';
 import { Play, TrendingUp, ChevronRight, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { fetchProgressLogs, fetchWorkoutLogs } from '../lib/db';
+import { fetchProgressLogs, fetchWorkoutLogs, fetchWorkoutCategories, WorkoutCategory } from '../lib/db';
 
 export default function Home() {
   const { user } = useAuth();
@@ -11,6 +11,7 @@ export default function Home() {
   const [latestWeight, setLatestWeight] = useState<number | null>(null);
   const [weightTrend, setWeightTrend] = useState<'up' | 'down' | 'same' | null>(null);
   const [logsCount, setLogsCount] = useState(0);
+  const [todayCategory, setTodayCategory] = useState<WorkoutCategory | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -27,10 +28,20 @@ export default function Home() {
         setLogsCount(logs.length);
       });
     }
+    fetchWorkoutCategories().then(categories => {
+      if (categories.length > 0) {
+        const index = new Date().getDay() % categories.length;
+        setTodayCategory(categories[index]);
+      }
+    });
   }, [user]);
 
   const targetWorkouts = 14;
   const progressPercent = Math.min((logsCount / targetWorkouts) * 100, 100).toFixed(0);
+
+  const todayTitle = todayCategory?.title || 'Lower Body Explosiveness';
+  const todayCategoryId = todayCategory?.id || 'muscle-gain';
+  const todayImage = todayCategory?.image;
 
   return (
     <motion.div 
@@ -66,8 +77,13 @@ export default function Home() {
       {/* Today's Workout */}
       <section>
         <div 
-          className="bg-white text-black rounded-[32px] p-8 flex flex-col justify-between h-[340px] relative overflow-hidden group cursor-pointer"
-          onClick={() => navigate('/workout/muscle-gain')}
+          className="text-black rounded-[32px] p-8 flex flex-col justify-between h-[340px] relative overflow-hidden group cursor-pointer"
+          style={todayImage ? {
+            backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(255,255,255,0.95)), url('${todayImage}')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          } : { backgroundColor: 'white' }}
+          onClick={() => navigate(`/workout/${todayCategoryId}`)}
         >
           <div className="absolute top-0 right-0 p-8 opacity-10">
              <Activity className="w-48 h-48" />
@@ -75,7 +91,7 @@ export default function Home() {
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div>
               <div className="inline-block px-3 py-1 bg-black text-[#00E676] text-[10px] font-bold tracking-widest uppercase rounded mb-4">Today's Session</div>
-              <h2 className="text-4xl font-extrabold mb-4 leading-[1.1]">Lower Body<br/>Explosiveness</h2>
+              <h2 className="text-4xl font-extrabold mb-4 leading-[1.1]">{todayTitle}</h2>
               <div className="flex gap-6 mt-6">
                 <div className="flex flex-col">
                   <span className="text-[10px] uppercase text-black/40 font-bold tracking-wider mb-1">Duration</span>
@@ -90,7 +106,7 @@ export default function Home() {
             
             <button 
               className="w-fit px-8 py-4 bg-black text-white font-bold rounded-2xl flex items-center gap-3 hover:bg-[#00E676] hover:text-black transition-all"
-              onClick={(e) => { e.stopPropagation(); navigate('/workout/muscle-gain'); }}
+              onClick={(e) => { e.stopPropagation(); navigate(`/workout/${todayCategoryId}`); }}
             >
               START WORKOUT <Play className="h-5 w-5 fill-current" />
             </button>

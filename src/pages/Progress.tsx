@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Target, TrendingUp, Calendar, Plus } from 'lucide-react';
+import { Target, TrendingUp, Calendar, Plus, Pencil, Check } from 'lucide-react';
 import { useAuth } from '../lib/AuthContext';
 import { fetchProgressLogs, addProgressLog, ProgressLog } from '../lib/db';
 
@@ -10,6 +10,12 @@ export default function Progress() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [newWeight, setNewWeight] = useState('');
+  const [goalWeight, setGoalWeight] = useState(() => {
+    const saved = localStorage.getItem('maxfit-goal-weight');
+    return saved ? Number(saved) : 175;
+  });
+  const [editingGoal, setEditingGoal] = useState(false);
+  const [goalInput, setGoalInput] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -60,9 +66,44 @@ export default function Progress() {
            <p className="text-3xl font-bold text-white tracking-tight">{latestWeight || '--'} <span className="text-sm font-normal text-white/40">lbs</span></p>
         </div>
         <div className="bg-white/5 rounded-[32px] p-6 border border-white/10">
-           <TrendingUp className="h-6 w-6 text-[#00E676] mb-4 text-opacity-80" />
+           <div className="flex justify-between items-start">
+             <TrendingUp className="h-6 w-6 text-[#00E676] mb-4 text-opacity-80" />
+             {!editingGoal && (
+               <button
+                 onClick={() => { setGoalInput(String(goalWeight)); setEditingGoal(true); }}
+                 className="h-7 w-7 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+               >
+                 <Pencil className="h-3 w-3 text-white/40" />
+               </button>
+             )}
+           </div>
            <p className="text-white/40 text-[10px] font-bold tracking-widest uppercase mb-1">Goal Weight</p>
-           <p className="text-3xl font-bold text-white tracking-tight">175 <span className="text-sm font-normal text-white/40">lbs</span></p>
+           {editingGoal ? (
+             <div className="flex items-center gap-2">
+               <input
+                 type="number"
+                 value={goalInput}
+                 onChange={(e) => setGoalInput(e.target.value)}
+                 className="w-20 bg-black/50 border border-white/10 rounded-lg px-2 py-1 text-white text-lg font-bold focus:outline-none focus:border-[#00E676] transition-colors"
+                 autoFocus
+               />
+               <button
+                 onClick={() => {
+                   const val = parseFloat(goalInput);
+                   if (!isNaN(val) && val > 0) {
+                     setGoalWeight(val);
+                     localStorage.setItem('maxfit-goal-weight', String(val));
+                   }
+                   setEditingGoal(false);
+                 }}
+                 className="h-7 w-7 rounded-full bg-[#00E676] flex items-center justify-center"
+               >
+                 <Check className="h-3.5 w-3.5 text-black" />
+               </button>
+             </div>
+           ) : (
+             <p className="text-3xl font-bold text-white tracking-tight">{goalWeight} <span className="text-sm font-normal text-white/40">lbs</span></p>
+           )}
         </div>
       </div>
 

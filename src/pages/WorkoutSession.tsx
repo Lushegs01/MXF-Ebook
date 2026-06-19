@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { X, Pause, Play, ChevronRight, ChevronLeft, CheckCircle2, Activity } from 'lucide-react';
@@ -19,6 +19,7 @@ export default function WorkoutSession() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [startTime] = useState(Date.now());
+  const pendingAdvance = useRef(false);
 
   useEffect(() => {
     async function loadData() {
@@ -40,16 +41,24 @@ export default function WorkoutSession() {
     } else if (timeLeft === 0 && isResting) {
       setIsResting(false);
       setIsPaused(false);
+      if (pendingAdvance.current) {
+        pendingAdvance.current = false;
+        if (currentIdx < exercises.length - 1) {
+          setCurrentIdx((prev) => prev + 1);
+        } else {
+          setIsFinished(true);
+        }
+      }
     }
     return () => clearInterval(interval);
-  }, [isResting, isPaused, timeLeft]);
+  }, [isResting, isPaused, timeLeft, currentIdx, exercises.length]);
 
   const handleNext = () => {
     if (currentIdx < exercises.length - 1) {
+      pendingAdvance.current = true;
       setIsResting(true);
       setIsPaused(false);
       setTimeLeft(exercise.rest);
-      setCurrentIdx((prev) => prev + 1);
     } else {
       setIsFinished(true);
     }
@@ -158,7 +167,7 @@ export default function WorkoutSession() {
                 {isPaused ? <Play className="h-7 w-7 ml-1" /> : <Pause className="h-7 w-7" />}
               </button>
               <button 
-                onClick={() => { setIsResting(false); setIsPaused(false); }}
+                onClick={() => { setIsResting(false); setIsPaused(false); if (pendingAdvance.current) { pendingAdvance.current = false; if (currentIdx < exercises.length - 1) { setCurrentIdx((prev) => prev + 1); } else { setIsFinished(true); } } }}
                 className="px-8 py-4 rounded-2xl bg-white text-black font-bold uppercase tracking-wider text-sm hover:bg-[#00E676] transition-colors"
               >
                 Skip Rest

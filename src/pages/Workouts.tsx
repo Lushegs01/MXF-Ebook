@@ -1,13 +1,27 @@
 import { motion } from 'motion/react';
 import { Search, SlidersHorizontal, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { fetchWorkoutCategories, WorkoutCategory } from '../lib/db';
 
 export default function Workouts() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<WorkoutCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortAlpha, setSortAlpha] = useState(false);
+
+  const displayCategories = useMemo(() => {
+    let result = categories;
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      result = result.filter((cat) => cat.title.toLowerCase().includes(q));
+    }
+    if (sortAlpha) {
+      result = [...result].sort((a, b) => a.title.localeCompare(b.title));
+    }
+    return result;
+  }, [categories, searchQuery, sortAlpha]);
 
   useEffect(() => {
     async function loadData() {
@@ -35,10 +49,16 @@ export default function Workouts() {
           <input 
             type="text" 
             placeholder="Search workouts..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full h-12 bg-white/5 rounded-full pl-12 pr-4 text-sm font-medium border border-white/10 focus:outline-none focus:border-[#00E676] transition-colors disabled:opacity-50 text-white placeholder:text-white/40"
           />
         </div>
-        <button className="h-12 w-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
+        <button 
+          onClick={() => setSortAlpha((prev) => !prev)}
+          className={`h-12 w-12 rounded-full bg-white/5 border flex items-center justify-center text-white hover:bg-white/10 transition-colors ${sortAlpha ? 'border-[#00E676] text-[#00E676]' : 'border-white/10'}`}
+          title={sortAlpha ? 'Default order' : 'Sort A-Z'}
+        >
           <SlidersHorizontal className="h-5 w-5" />
         </button>
       </div>
@@ -52,7 +72,7 @@ export default function Workouts() {
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4">
-            {categories.map((cat) => (
+            {displayCategories.map((cat) => (
               <div 
                 key={cat.id} 
                 className="relative h-48 rounded-[32px] overflow-hidden group border border-white/10 cursor-pointer shadow-lg"
