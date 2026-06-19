@@ -6,16 +6,15 @@
   --color-mf-black: #0F0F0F;
   --color-mf-darker: #0A0A0A;
   --color-mf-white: #FFFFFF;
-  --color-mf-orange: #F26F21;
-  --color-mf-teal: #138086;
-  --color-mf-teal-light: #2A9AA0;
+  --color-mf-green: #00E676;
+  --color-mf-orange: #FF9800;
   --color-mf-red: #F44336;
   --color-mf-gray: #1E1E1E;
   --color-mf-lightgray: #1A1A1A;
   
   --color-background: var(--color-mf-black);
   --color-foreground: var(--color-mf-white);
-  --color-primary: var(--color-mf-orange);
+  --color-primary: var(--color-mf-green);
   --color-primary-foreground: var(--color-mf-black);
   --color-muted: var(--color-mf-gray);
   --color-muted-foreground: rgba(255, 255, 255, 0.4);

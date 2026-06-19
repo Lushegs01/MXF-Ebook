@@ -17,6 +17,10 @@ service cloud.firestore {
       return request.resource.data;
     }
 
+    function existing() {
+      return resource.data;
+    }
+
     function isValidProgressLog(data, userId) {
       return data.keys().hasAll(['userId', 'weight', 'date', 'createdAt'])
         && data.keys().size() <= 8
@@ -30,30 +34,42 @@ service cloud.firestore {
         && (!('legs' in data) || data.legs is number);
     }
 
-    function isValidWorkoutSession(data, userId) {
-      return data.keys().hasAll(['userId', 'workoutId', 'workoutTitle', 'completedAt', 'createdAt'])
-        && data.keys().size() <= 8
+    function isValidWorkoutLog(data, userId) {
+      return data.keys().hasAll(['userId', 'categoryId', 'date', 'durationMinutes', 'createdAt'])
+        && data.keys().size() == 5
         && data.userId == userId
-        && data.workoutId is string && data.workoutId.size() <= 64
-        && data.workoutTitle is string && data.workoutTitle.size() <= 100
-        && data.completedAt is string && data.completedAt.size() <= 20
-        && data.createdAt == request.time
-        && (!('durationMin' in data) || data.durationMin is number)
-        && (!('exerciseCount' in data) || data.exerciseCount is number);
+        && data.categoryId is string && data.categoryId.size() <= 128
+        && data.date is string && data.date.size() <= 20
+        && data.durationMinutes is number
+        && data.createdAt == request.time;
     }
 
-    function isValidUserProfile(data) {
-      return data.keys().size() <= 5
-        && (!('isPremium' in data) || data.isPremium is bool)
-        && (!('goalWeight' in data) || data.goalWeight == null || data.goalWeight is number)
-        && (!('notificationsEnabled' in data) || data.notificationsEnabled is bool)
-        && (!('updatedAt' in data) || data.updatedAt == request.time);
+    function isValidWorkoutCategory(data) {
+      return data.keys().hasAll(['title', 'count', 'image'])
+        && data.keys().size() == 3
+        && data.title is string && data.title.size() <= 200
+        && data.count is number
+        && data.image is string && data.image.size() <= 1000;
     }
 
-    match /users/{userId} {
-      allow get: if isSignedIn() && request.auth.uid == userId && isValidId(userId);
-      allow create, update: if isSignedIn() && request.auth.uid == userId && isValidId(userId)
-        && isValidUserProfile(incoming());
+    function isValidExercise(data) {
+      return data.keys().hasAll(['categoryId', 'name', 'sets', 'reps', 'rest', 'target', 'image'])
+        && data.keys().size() == 7
+        && data.categoryId is string && data.categoryId.size() <= 128
+        && data.name is string && data.name.size() <= 200
+        && data.sets is number
+        && data.reps is string && data.reps.size() <= 50
+        && data.rest is number
+        && data.target is string && data.target.size() <= 200
+        && data.image is string && data.image.size() <= 1000;
+    }
+
+    function isValidNutritionPlan(data) {
+      return data.keys().hasAll(['title', 'cals', 'image'])
+        && data.keys().size() == 3
+        && data.title is string && data.title.size() <= 200
+        && data.cals is string && data.cals.size() <= 50
+        && data.image is string && data.image.size() <= 1000;
     }
 
     match /users/{userId}/progressLogs/{logId} {
@@ -63,13 +79,33 @@ service cloud.firestore {
         && isValidProgressLog(incoming(), userId);
       allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(logId);
     }
-
-    match /users/{userId}/workoutSessions/{sessionId} {
-      allow get: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(sessionId);
+    
+    match /users/{userId}/workoutLogs/{logId} {
+      allow get: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(logId);
       allow list: if isSignedIn() && request.auth.uid == userId && isValidId(userId);
-      allow create: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(sessionId)
-        && isValidWorkoutSession(incoming(), userId);
-      allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(sessionId);
+      allow create: if isSignedIn() && request.auth.uid == userId && isValidId(userId) && isValidId(logId)
+        && isValidWorkoutLog(incoming(), userId);
+    }
+
+    match /workoutCategories/{categoryId} {
+      allow get: if isSignedIn() && isValidId(categoryId);
+      allow list: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(categoryId) && isValidWorkoutCategory(incoming());
+      allow update: if isSignedIn() && isValidId(categoryId) && isValidWorkoutCategory(incoming());
+    }
+
+    match /exercises/{exerciseId} {
+      allow get: if isSignedIn() && isValidId(exerciseId);
+      allow list: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(exerciseId) && isValidExercise(incoming());
+      allow update: if isSignedIn() && isValidId(exerciseId) && isValidExercise(incoming());
+    }
+
+    match /nutritionPlans/{planId} {
+      allow get: if isSignedIn() && isValidId(planId);
+      allow list: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(planId) && isValidNutritionPlan(incoming());
+      allow update: if isSignedIn() && isValidId(planId) && isValidNutritionPlan(incoming());
     }
   }
 }

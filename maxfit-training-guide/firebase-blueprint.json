@@ -7,8 +7,8 @@
       "properties": {
         "userId": { "type": "string" },
         "weight": { "type": "number" },
-        "chest": { "type": "number", "description": "Optional" },
-        "waist": { "type": "number", "description": "Optional" },
+        "chest": { "type": "number" },
+        "waist": { "type": "number" },
         "arms": { "type": "number", "description": "Optional" },
         "legs": { "type": "number", "description": "Optional" },
         "date": { "type": "string" },
@@ -16,44 +16,77 @@
       },
       "required": ["userId", "weight", "date", "createdAt"]
     },
-    "WorkoutSession": {
-      "title": "WorkoutSession",
-      "description": "A completed workout logged to the user's history",
+    "WorkoutCategory": {
+      "title": "WorkoutCategory",
+      "description": "Workout categories/plans",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "count": { "type": "number" },
+        "image": { "type": "string" }
+      },
+      "required": ["title", "count", "image"]
+    },
+    "Exercise": {
+      "title": "Exercise",
+      "description": "Exercises for a workout category",
+      "type": "object",
+      "properties": {
+        "categoryId": { "type": "string" },
+        "name": { "type": "string" },
+        "sets": { "type": "number" },
+        "reps": { "type": "string" },
+        "rest": { "type": "number" },
+        "target": { "type": "string" },
+        "image": { "type": "string" }
+      },
+      "required": ["categoryId", "name", "sets", "reps", "rest", "target", "image"]
+    },
+    "NutritionPlan": {
+      "title": "NutritionPlan",
+      "description": "Nutrition Plans",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "cals": { "type": "string" },
+        "image": { "type": "string" }
+      },
+      "required": ["title", "cals", "image"]
+    },
+    "WorkoutLog": {
+      "title": "WorkoutLog",
+      "description": "Log of a fully completed workout session",
       "type": "object",
       "properties": {
         "userId": { "type": "string" },
-        "workoutId": { "type": "string" },
-        "workoutTitle": { "type": "string" },
-        "durationMin": { "type": "number", "description": "Optional" },
-        "exerciseCount": { "type": "number", "description": "Optional" },
-        "completedAt": { "type": "string", "description": "YYYY-MM-DD" },
+        "categoryId": { "type": "string" },
+        "date": { "type": "string" },
+        "durationMinutes": { "type": "number" },
         "createdAt": { "type": "string" }
       },
-      "required": ["userId", "workoutId", "workoutTitle", "completedAt", "createdAt"]
-    },
-    "UserProfile": {
-      "title": "UserProfile",
-      "description": "Per-user settings stored on the user document",
-      "type": "object",
-      "properties": {
-        "isPremium": { "type": "boolean", "description": "Optional" },
-        "goalWeight": { "type": "number", "description": "Optional" },
-        "notificationsEnabled": { "type": "boolean", "description": "Optional" }
-      }
+      "required": ["userId", "categoryId", "date", "createdAt"]
     }
   },
   "firestore": {
-    "users/{userId}": {
-      "schema": { "$ref": "#/entities/UserProfile" },
-      "description": "User document holding profile settings (premium status, goal weight, notification preference)."
-    },
     "users/{userId}/progressLogs/{logId}": {
       "schema": { "$ref": "#/entities/ProgressLog" },
       "description": "Collection inside user doc for their progress tracking logs."
     },
-    "users/{userId}/workoutSessions/{sessionId}": {
-      "schema": { "$ref": "#/entities/WorkoutSession" },
-      "description": "Collection inside user doc for completed workout history."
+    "users/{userId}/workoutLogs/{logId}": {
+      "schema": { "$ref": "#/entities/WorkoutLog" },
+      "description": "Collection inside user doc for completed workouts."
+    },
+    "workoutCategories/{categoryId}": {
+      "schema": { "$ref": "#/entities/WorkoutCategory" },
+      "description": "Global read-only collection for workout categories."
+    },
+    "exercises/{exerciseId}": {
+      "schema": { "$ref": "#/entities/Exercise" },
+      "description": "Global read-only collection for exercises."
+    },
+    "nutritionPlans/{planId}": {
+      "schema": { "$ref": "#/entities/NutritionPlan" },
+      "description": "Global read-only collection for nutrition plans."
     }
   }
 }

@@ -47,7 +47,7 @@ export default function Progress() {
         </div>
         <button 
           onClick={() => setShowModal(true)}
-          className="h-10 w-10 bg-[#F26F21] text-black rounded-full flex items-center justify-center hover:bg-[#F26F21]/90 transition-colors"
+          className="h-10 w-10 bg-[#00E676] text-black rounded-full flex items-center justify-center hover:bg-[#00E676]/90 transition-colors"
         >
           <Plus className="h-5 w-5 font-bold" />
         </button>
@@ -60,7 +60,7 @@ export default function Progress() {
            <p className="text-3xl font-bold text-white tracking-tight">{latestWeight || '--'} <span className="text-sm font-normal text-white/40">lbs</span></p>
         </div>
         <div className="bg-white/5 rounded-[32px] p-6 border border-white/10">
-           <TrendingUp className="h-6 w-6 text-[#F26F21] mb-4 text-opacity-80" />
+           <TrendingUp className="h-6 w-6 text-[#00E676] mb-4 text-opacity-80" />
            <p className="text-white/40 text-[10px] font-bold tracking-widest uppercase mb-1">Goal Weight</p>
            <p className="text-3xl font-bold text-white tracking-tight">175 <span className="text-sm font-normal text-white/40">lbs</span></p>
         </div>
@@ -97,7 +97,7 @@ export default function Progress() {
               value={newWeight}
               onChange={(e) => setNewWeight(e.target.value)}
               placeholder="e.g. 180"
-              className="w-full h-14 bg-black/50 border border-white/10 rounded-2xl px-6 text-white text-lg focus:outline-none focus:border-[#F26F21] mb-8 transition-colors placeholder:text-white/20 text-center font-bold"
+              className="w-full h-14 bg-black/50 border border-white/10 rounded-2xl px-6 text-white text-lg focus:outline-none focus:border-[#00E676] mb-8 transition-colors placeholder:text-white/20 text-center font-bold"
             />
             <div className="flex gap-4">
               <button 
@@ -108,7 +108,7 @@ export default function Progress() {
               </button>
               <button 
                 onClick={handleAddLog}
-                className="flex-1 h-14 bg-[#F26F21] text-black rounded-2xl font-bold hover:bg-[#F26F21]/90 transition-colors"
+                className="flex-1 h-14 bg-[#00E676] text-black rounded-2xl font-bold hover:bg-[#00E676]/90 transition-colors"
               >
                 Save
               </button>

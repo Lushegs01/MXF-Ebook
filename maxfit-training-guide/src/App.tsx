@@ -3,30 +3,35 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { ReactNode } from 'react';
 import { AuthProvider, useAuth } from './lib/AuthContext';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect, ReactNode } from 'react';
+import { seedDatabaseIfEmpty } from './lib/db';
 import AuthScreen from './pages/AuthScreen';
 import MainLayout from './components/layout/MainLayout';
-import Logo from './components/Logo';
 import Home from './pages/Home';
 import Workouts from './pages/Workouts';
 import Nutrition from './pages/Nutrition';
 import Progress from './pages/Progress';
 import Profile from './pages/Profile';
 import WorkoutSession from './pages/WorkoutSession';
-import ExerciseDetail from './pages/ExerciseDetail';
 import NutritionDetail from './pages/NutritionDetail';
+import ExerciseDetail from './pages/ExerciseDetail';
 import Premium from './pages/Premium';
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   
+  useEffect(() => {
+    if (user) {
+      seedDatabaseIfEmpty();
+    }
+  }, [user]);
+  
   if (loading) {
     return (
-      <div className="min-h-screen bg-mf-black text-mf-white flex flex-col items-center justify-center gap-8">
-        <Logo variant="mark" className="h-20 w-20 animate-pulse" />
-        <div className="w-8 h-8 border-4 border-mf-orange border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-[#0F0F0F] text-white flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#00E676] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }

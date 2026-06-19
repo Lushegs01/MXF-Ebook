@@ -1,20 +1,39 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { X } from 'lucide-react';
-import { getExercise } from '../lib/content';
+import { X, Play, Activity } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { fetchExerciseById, Exercise } from '../lib/db';
 
 export default function ExerciseDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const exercise = getExercise(id);
+  const [exercise, setExercise] = useState<Exercise | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      if (id) {
+        const data = await fetchExerciseById(id);
+        setExercise(data);
+      }
+      setLoading(false);
+    }
+    loadData();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-[#0F0F0F] text-white">
+        <Activity className="h-8 w-8 text-[#00E676] animate-pulse" />
+      </div>
+    );
+  }
 
   if (!exercise) {
     return (
-      <div className="min-h-screen bg-[#0F0F0F] text-white flex flex-col items-center justify-center p-6 text-center gap-6">
-        <h1 className="text-2xl font-bold">Exercise not found</h1>
-        <button onClick={() => navigate(-1)} className="px-8 py-4 bg-[#F26F21] text-black rounded-2xl font-bold">
-          Go Back
-        </button>
+      <div className="h-screen flex flex-col bg-[#0F0F0F] text-white overflow-hidden max-w-md mx-auto items-center justify-center">
+        <p className="text-white/60 mb-6 font-medium">Exercise not found.</p>
+        <button onClick={() => navigate(-1)} className="px-6 py-3 bg-white text-black font-bold rounded-xl hover:bg-gray-200">Go Back</button>
       </div>
     );
   }
@@ -30,11 +49,16 @@ export default function ExerciseDetail() {
       <div className="h-[40vh] relative">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${exercise.image}')` }} />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F0F] via-transparent to-transparent" />
+        <div className="absolute inset-0 flex items-center justify-center">
+           <button className="h-16 w-16 rounded-full bg-white/20 backdrop-blur border border-white/40 flex items-center justify-center hover:bg-white/30 transition-colors">
+             <Play className="h-8 w-8 ml-1 fill-white" />
+           </button>
+        </div>
       </div>
 
       <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="flex-1 p-6 space-y-8 overflow-y-auto pb-24">
          <div>
-           <div className="inline-block px-3 py-1 bg-[#F26F21]/10 text-[#F26F21] rounded text-[10px] font-bold tracking-widest mb-4 uppercase">{exercise.difficulty}</div>
+           <div className="inline-block px-3 py-1 bg-[#00E676]/10 text-[#00E676] rounded text-[10px] font-bold tracking-widest mb-4 uppercase">Intermediate</div>
            <h1 className="text-3xl font-extrabold mb-2 leading-tight">{exercise.name}</h1>
            <p className="text-white/40 font-bold text-[10px] tracking-widest uppercase">Target: {exercise.target}</p>
          </div>
@@ -57,15 +81,11 @@ export default function ExerciseDetail() {
          <div>
            <h2 className="text-xl font-bold mb-4">Instructions</h2>
            <ol className="list-decimal list-outside ml-4 space-y-4 text-white/60 text-[15px] font-medium leading-relaxed">
-             {exercise.instructions.map((step, i) => (
-               <li key={i}>{step}</li>
-             ))}
+             <li>Follow standard form for {exercise.name}.</li>
+             <li>Brace your core and perform the movement smoothly.</li>
+             <li>Maintain control during both concentric and eccentric phases.</li>
+             <li>Squeeze your {exercise.target} throughout the motion.</li>
            </ol>
-         </div>
-
-         <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-5">
-           <h3 className="text-red-500 font-bold text-[10px] mb-2 uppercase tracking-widest">Common Mistake</h3>
-           <p className="text-white/60 text-[15px] font-medium leading-relaxed">{exercise.commonMistake}</p>
          </div>
       </motion.div>
     </div>
